@@ -6,18 +6,9 @@
     <title>Audio Playback</title>
 </head>
 <body>
-    <audio id="audioPlayer" controls>
-        <source src="Assamese.mp3" type="audio/mpeg">
+    <audio autoplay controls>
+        <source src="https://drive.google.com/uc?id=1PThqeJcfjCNZW2dZ-ZwAGQR6zhBO6Ofq" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
-
-    <script>
-        window.addEventListener('load', () => {
-            const audio = document.getElementById('audioPlayer');
-            audio.play().catch((error) => {
-                console.log('Autoplay failed:', error);
-            });
-        });
-    </script>
 </body>
 </html>
