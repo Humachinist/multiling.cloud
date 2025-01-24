@@ -10,12 +10,12 @@
     
     <!-- Custom CSS for the audio player -->
     <style>
-        /* Add your CSS styles here */
         .container {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100%;
+            flex-direction: column;
         }
 
         body, html {
@@ -30,20 +30,17 @@
             justify-content: center;
         }
 
-        .control-container div.amplitude-play-pause {
-            width: 74px;
-            height: 74px;
+        .control-container div {
+            width: 50px;
+            height: 50px;
+            margin: 0 5px;
             cursor: pointer;
         }
 
-        .control-container div.amplitude-play-pause.amplitude-paused {
-            background: url("https://cdn.jsdelivr.net/npm/amplitudejs@latest/dist/images/play.svg");
-            background-size: cover;
-        }
-
-        .control-container div.amplitude-play-pause.amplitude-playing {
-            background: url("https://cdn.jsdelivr.net/npm/amplitudejs@latest/dist/images/pause.svg");
-            background-size: cover;
+        .control-container div img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .time-container {
@@ -55,15 +52,9 @@
             margin-top: 5px;
         }
 
-        progress.amplitude-song-played-progress {
-            background-color: rgb(183, 183, 183);
-            -webkit-appearance: none;
-            appearance: none;
+        .progress-bar {
             width: 100%;
             height: 10px;
-            display: block;
-            cursor: pointer;
-            border: none;
         }
 
         .bottom-container {
@@ -95,6 +86,10 @@
             cursor: pointer;
             font-family: "Arial";
         }
+
+        .volume-control {
+            width: 100px;
+        }
     </style>
 </head>
 
@@ -103,7 +98,7 @@
         <!-- Custom Audio Player Container -->
         <div id="single-song-player" data-src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3">
             <div class="bottom-container">
-                <progress class="amplitude-song-played-progress" id="song-played-progress"></progress>
+                <progress class="amplitude-song-played-progress progress-bar" id="song-played-progress"></progress>
 
                 <div class="time-container">
                     <span class="current-time">
@@ -115,7 +110,30 @@
                 </div>
 
                 <div class="control-container">
-                    <div class="amplitude-play-pause" id="play-pause"></div>
+                    <!-- Replay Button -->
+                    <div class="replay" onclick="replayAudio()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Replay_Icon_2.svg/1200px-Replay_Icon_2.svg.png" alt="Replay">
+                    </div>
+
+                    <!-- Fast Backward Button -->
+                    <div class="fast-backward" onclick="skipAudio(-10)">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Arrow_back.svg/1200px-Arrow_back.svg.png" alt="Fast Backward">
+                    </div>
+
+                    <!-- Play/Pause Button -->
+                    <div class="play-pause" id="play-pause" onclick="togglePlayPause()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Play_arrow.svg/1200px-Play_arrow.svg.png" alt="Play/Pause">
+                    </div>
+
+                    <!-- Fast Forward Button -->
+                    <div class="fast-forward" onclick="skipAudio(10)">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Arrow_forward.svg/1200px-Arrow_forward.svg.png" alt="Fast Forward">
+                    </div>
+                </div>
+
+                <!-- Volume Control -->
+                <div class="control-container">
+                    <input class="volume-control" type="range" id="volume-control" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
                 </div>
             </div>
             <div class="btn-container">
@@ -130,46 +148,41 @@
 
     <!-- Custom JS for Audio Player -->
     <script>
-        function activateAudioPlayer() {
-            const player = document.querySelector('#single-song-player');
-            const changePlayerBtn = document.querySelector('.change-player');
-            if(!player) {
-                return;
+        let audio = new Audio('https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3');
+        let isPlaying = false;
+
+        function togglePlayPause() {
+            if (isPlaying) {
+                audio.pause();
+                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Play_arrow.svg/1200px-Play_arrow.svg.png";
+            } else {
+                audio.play();
+                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pause_button_Icon.svg/1024px-Pause_button_Icon.svg.png";
             }
+            isPlaying = !isPlaying;
+        }
 
-            changePlayerBtn.addEventListener('click', () => {
-                player.style.display = "none"
-                document.querySelector('#standart-player').style.display = "block"
-            })
-
-            if(window.Amplitude && player) {
-                const audioUrl = player.dataset.src;
-                Amplitude.init({
-                    "bindings": {
-                        37: 'prev',
-                        39: 'next',
-                        32: 'play_pause'
-                    },
-                    "songs": [
-                        {
-                            "url": audioUrl,
-                        }
-                    ]
-                });
-            
-                window.onkeydown = function(e) {
-                    return !(e.keyCode == 32);
-                };
-            
-                document.getElementById('song-played-progress').addEventListener('click', function(e) {
-                    var offset = this.getBoundingClientRect();
-                    var x = e.pageX - offset.left;
-                    Amplitude.setSongPlayedPercentage((parseFloat(x) / parseFloat(this.offsetWidth)) * 100);
-                });
+        function replayAudio() {
+            audio.currentTime = 0;
+            if (!isPlaying) {
+                audio.play();
+                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pause_button_Icon.svg/1024px-Pause_button_Icon.svg.png";
+                isPlaying = true;
             }
         }
 
-        activateAudioPlayer();
+        function skipAudio(seconds) {
+            audio.currentTime += seconds;
+        }
+
+        function setVolume(value) {
+            audio.volume = value;
+        }
+
+        // Update Progress Bar as the Audio Plays
+        audio.ontimeupdate = function() {
+            document.getElementById('song-played-progress').value = (audio.currentTime / audio.duration) * 100;
+        }
     </script>
 </body>
 </html>
