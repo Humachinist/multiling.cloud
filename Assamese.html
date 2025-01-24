@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio 1</title>
+    <title>Audio Playback</title>
 </head>
 <body>
-    <audio autoplay controls>
+    <audio id="audioPlayer" controls>
         <source src="Assamese.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <script>
+        window.addEventListener('load', () => {
+            const audio = document.getElementById('audioPlayer');
+            audio.play().catch((error) => {
+                console.log('Autoplay failed:', error);
+            });
+        });
+    </script>
 </body>
 </html>
