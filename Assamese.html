@@ -1,0 +1,49 @@
+<head>
+    <!-- AmplitudeJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/amplitudejs@latest/dist/amplitude.min.js"></script>
+
+    <!-- Custom CSS file hosted on GitHub -->
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/assets/css/music-player.css?v=18092023">
+
+    <!-- Viewport settings -->
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
+    <meta name="robots" content="noindex, nofollow" />
+</head>
+
+<div class="container">
+    <!-- Music Player -->
+    <div id="single-song-player" data-src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/mp3/2f44833d-f0c5-4256-9901-d1138e58952a.mp3">
+        <div class="bottom-container">
+            <progress class="amplitude-song-played-progress" id="song-played-progress"></progress>
+
+            <div class="time-container">
+                <span class="current-time">
+                    <span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>
+                </span>
+                <span class="duration">
+                    <span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
+                </span>
+            </div>
+
+            <div class="control-container">
+                <div class="amplitude-play-pause" id="play-pause"></div>
+            </div>
+        </div>
+        <div class="btn-container">
+            <div class="change-player">Audio not working?</div>
+        </div>
+    </div>
+
+    <!-- Hidden Standard Audio Player (for fallback) -->
+    <audio 
+        id="standart-player" 
+        style="display: none"
+        controls
+        src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/mp3/2f44833d-f0c5-4256-9901-d1138e58952a.mp3">
+    </audio>
+</div>
+
+<!-- Custom JS file hosted on GitHub -->
+<script src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/assets/js/music-player.js?v=18092023"></script>
+
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"90725c307930b24d","version":"2025.1.0","r":1,"token":"ba9386ef69374dbc9ca25bc62eb77e0a","serverTiming":{"name":{"cfExtPri":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}}}' crossorigin="anonymous"></script>
