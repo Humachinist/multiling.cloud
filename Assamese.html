@@ -1,188 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Player</title>
-
+    <title>Assamese Language</title>
     <!-- AmplitudeJS library -->
     <script src="https://cdn.jsdelivr.net/npm/amplitudejs@latest/dist/amplitude.min.js"></script>
-    
-    <!-- Custom CSS for the audio player -->
     <style>
-        .container {
+        /* General Reset */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e7eff6;
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: center;
-            height: 100%;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .audio-player-container {
+            width: 300px;
+            background-color: #cbd5e1;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
             flex-direction: column;
+            align-items: center; /* Ensures all elements are horizontally centered */
         }
 
-        body, html {
-            height: 100%;
-            background: black;
-        }
-
-        .control-container {
-            margin-top: 10px;
-            padding-bottom: 10px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .control-container div {
-            width: 50px;
-            height: 50px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .control-container div img {
+        .progress-container {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .time-container {
-            font-size: 16px;
-            color: #3e4957;
-            height: 15px;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
+            margin-bottom: 20px;
         }
 
         .progress-bar {
             width: 100%;
-            height: 10px;
+            height: 6px;
+            background-color: #94a3b8;
+            border-radius: 3px;
+            position: relative;
         }
 
-        .bottom-container {
-            background-color: #dfdfdf;
-            border-bottom-right-radius: 10px;
-            border-bottom-left-radius: 10px;
+        .progress-bar .progress {
+            width: 0%;
+            height: 100%;
+            background-color: #38bdf8;
+            border-radius: 3px;
         }
 
-        #single-song-player {
-            border-radius: 10px;
-            margin: auto;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 460px;
-            -webkit-font-smoothing: antialiased;
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 8px;
+            color: #334155;
         }
 
-        .btn-container {
+        /* Play Button */
+        .play-btn {
+            background-color: white;
+            color: #2563eb;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             display: flex;
             justify-content: center;
-        }
-
-        .change-player {
-            color: white;
-            margin-top: 30px;
-            background: #9B27AF;
-            padding: 10px;
-            border-radius: 5px;
+            align-items: center;
             cursor: pointer;
-            font-family: "Arial";
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .volume-control {
-            width: 100px;
+        .play-btn:hover {
+            background-color: #e2e8f0;
+            transform: scale(1.1);
+        }
+
+        .play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #2563eb;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Custom Audio Player Container -->
-        <div id="single-song-player" data-src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3">
-            <div class="bottom-container">
-                <progress class="amplitude-song-played-progress progress-bar" id="song-played-progress"></progress>
-
-                <div class="time-container">
-                    <span class="current-time">
-                        <span class="amplitude-current-minutes"></span>:<span class="amplitude-current-seconds"></span>
-                    </span>
-                    <span class="duration">
-                        <span class="amplitude-duration-minutes"></span>:<span class="amplitude-duration-seconds"></span>
-                    </span>
-                </div>
-
-                <div class="control-container">
-                    <!-- Replay Button -->
-                    <div class="replay" onclick="replayAudio()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Replay_Icon_2.svg/1200px-Replay_Icon_2.svg.png" alt="Replay">
-                    </div>
-
-                    <!-- Fast Backward Button -->
-                    <div class="fast-backward" onclick="skipAudio(-10)">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Arrow_back.svg/1200px-Arrow_back.svg.png" alt="Fast Backward">
-                    </div>
-
-                    <!-- Play/Pause Button -->
-                    <div class="play-pause" id="play-pause" onclick="togglePlayPause()">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Play_arrow.svg/1200px-Play_arrow.svg.png" alt="Play/Pause">
-                    </div>
-
-                    <!-- Fast Forward Button -->
-                    <div class="fast-forward" onclick="skipAudio(10)">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Arrow_forward.svg/1200px-Arrow_forward.svg.png" alt="Fast Forward">
-                    </div>
-                </div>
-
-                <!-- Volume Control -->
-                <div class="control-container">
-                    <input class="volume-control" type="range" id="volume-control" min="0" max="1" step="0.01" value="1" onchange="setVolume(this.value)">
-                </div>
+    <div class="audio-player-container">
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress amplitude-song-played-progress"></div>
             </div>
-            <div class="btn-container">
-                <div class="change-player">Audio not working?</div>
+            <div class="time-display">
+                <span class="amplitude-current-time">0:00</span>
+                <span class="amplitude-duration-time">0:04</span>
             </div>
         </div>
-        
-        <!-- Fallback Standard HTML Player -->
-        <audio id="standart-player" style="display: none" controls src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3">
-        </audio>
+
+        <!-- Play Button -->
+        <button class="play-btn amplitude-play-pause">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"></path>
+            </svg>
+        </button>
     </div>
 
-    <!-- Custom JS for Audio Player -->
+    <!-- AmplitudeJS Initialization -->
     <script>
-        let audio = new Audio('https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3');
-        let isPlaying = false;
+        Amplitude.init({
+            songs: [
+                {
+                    url: "https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Assamese.mp3",
+                },
+            ],
+        });
 
-        function togglePlayPause() {
-            if (isPlaying) {
-                audio.pause();
-                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Play_arrow.svg/1200px-Play_arrow.svg.png";
-            } else {
-                audio.play();
-                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pause_button_Icon.svg/1024px-Pause_button_Icon.svg.png";
-            }
-            isPlaying = !isPlaying;
-        }
-
-        function replayAudio() {
-            audio.currentTime = 0;
-            if (!isPlaying) {
-                audio.play();
-                document.querySelector('.play-pause img').src = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Pause_button_Icon.svg/1024px-Pause_button_Icon.svg.png";
-                isPlaying = true;
-            }
-        }
-
-        function skipAudio(seconds) {
-            audio.currentTime += seconds;
-        }
-
-        function setVolume(value) {
-            audio.volume = value;
-        }
-
-        // Update Progress Bar as the Audio Plays
-        audio.ontimeupdate = function() {
-            document.getElementById('song-played-progress').value = (audio.currentTime / audio.duration) * 100;
-        }
+        // Sync Progress Bar
+        const progressBar = document.querySelector('.progress-bar .progress');
+        document.querySelector('.progress-bar').addEventListener('click', function (e) {
+            const offset = this.getBoundingClientRect();
+            const x = e.pageX - offset.left;
+            const percentage = (x / this.offsetWidth) * 100;
+            Amplitude.setSongPlayedPercentage(percentage);
+        });
     </script>
 </body>
+
 </html>
