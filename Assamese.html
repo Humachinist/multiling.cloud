@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assamese Language</title>
+    <title>অসমীয়া ভাষা</title>
     <!-- AmplitudeJS library -->
     <script src="https://cdn.jsdelivr.net/npm/amplitudejs@latest/dist/amplitude.min.js"></script>
     <style>
@@ -102,9 +102,14 @@
         </div>
 
         <!-- Play Button -->
-        <button class="play-btn amplitude-play-pause">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <button class="play-btn" id="play-pause-btn">
+            <!-- Play Icon -->
+            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"></path>
+            </svg>
+            <!-- Pause Icon (Hidden by Default) -->
+            <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
+                <path d="M6 19h4V5H6zm8-14v14h4V5z"></path>
             </svg>
         </button>
     </div>
@@ -117,6 +122,26 @@
                     url: "https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Assamese.mp3",
                 },
             ],
+        });
+
+        // Get references to the play/pause button and icons
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+
+        // Add event listener for play/pause button
+        playPauseBtn.addEventListener('click', () => {
+            if (Amplitude.getPlayerState() === 'playing') {
+                Amplitude.pause();
+                // Show play icon and hide pause icon
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+            } else {
+                Amplitude.play();
+                // Show pause icon and hide play icon
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+            }
         });
 
         // Sync Progress Bar
