@@ -3,12 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio 1</title>
+    <title>Bawm Audio</title>
+    <style>
+        /* Center the audio player */
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Styling for the audio element */
+        audio {
+            width: 100%;
+            max-width: 500px; /* Adjust size for mobile */
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <audio autoplay controls>
-        <source src="Bawm.mp3" type="audio/mpeg">
+
+    <!-- Audio Player with autoplay and muted for compatibility -->
+    <audio id="audioPlayer" autoplay muted>
+        <source src="https://raw.githubusercontent.com/Humachinist/multiling.cloud/main/Bawm.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+
+    <script>
+        window.addEventListener('load', () => {
+            const audio = document.getElementById('audioPlayer');
+            // Try to play audio after the page loads
+            audio.play().catch((error) => {
+                console.log('Autoplay failed:', error);
+            });
+        });
+    </script>
+
 </body>
 </html>
